@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { collection, getDocs } from 'firebase/firestore';
-import db from '../config'; // Importez l'instance de Firestore
-import { useNavigation } from '@react-navigation/native'; // Importez useNavigation depuis @react-navigation/native
+import db from '../config'; 
+import { useNavigation } from '@react-navigation/native'; 
 
 const Accueil = () => {
   const [oeuvres, setOeuvres] = useState([]);

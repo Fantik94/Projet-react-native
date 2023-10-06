@@ -1,12 +1,13 @@
-
-
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import Connexion from './Connexion'; // Importez useNavigation pour accéder à la navigation
 
 const Navigation = () => {
-  
-  const handleConnexionPress = () => {
+  const navigation = useNavigation(); // Utilisez useNavigation pour accéder à la navigation
 
+  const handleConnexionPress = () => {
+    navigation.navigate('Connexion'); // Redirigez l'utilisateur vers la page de connexion
   };
 
   return (
