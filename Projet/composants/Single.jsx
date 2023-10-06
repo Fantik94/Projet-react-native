@@ -9,6 +9,7 @@ const Single = ({ route }) => {
       <Image source={{ uri: oeuvre.image }} style={styles.oeuvreImage} />
       <Text style={styles.oeuvreNom}>{oeuvre.nom}</Text>
       <Text style={styles.oeuvreAuteur}>Auteur : {oeuvre.auteur}</Text>
+      <Text style={styles.oeuvreDescription}>Description : {oeuvre.description}</Text>
       <Text style={styles.oeuvreDate}>Date de création : {oeuvre.dt_creation}</Text>
     </View>
   );
@@ -32,6 +33,9 @@ const styles = StyleSheet.create({
   },
   oeuvreAuteur: {
     fontSize: 20,
+  },
+  oeuvreDescription: {
+    fontSize: 18,
   },
   oeuvreDate: {
     fontSize: 16,
