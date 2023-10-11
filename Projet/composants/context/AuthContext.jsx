@@ -1,37 +1,40 @@
 import React, { createContext, useContext, useState } from "react";
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { getDocs, collection, query, where } from 'firebase/firestore';
-import db from '../../config';
+import { getDocs, collection, query, where } from "firebase/firestore";
+import db from "../../config";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const auth = getAuth();
-
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [email, setEmail] = useState('');  // Initialisé à une chaîne vide
+  
   const login = async (email, password) => {
     try {
-      const gestionnairesRef = collection(db, 'gestionnaire');
-      const q = query(gestionnairesRef, where('email', '==', email));
-
+      const gestionnairesRef = collection(db, "gestionnaire");
+      const q = query(gestionnairesRef, where("email", "==", email));
       const querySnapshot = await getDocs(q);
-
+      
       if (!querySnapshot.empty) {
-        querySnapshot.forEach(async (doc) => {
+        querySnapshot.forEach((doc) => {
           const data = doc.data();
-          const storedPassword = data.password;
+          if (password === data.password) {
+            setIsAuthenticated(true);
+            setEmail(email);
+          } else {
+            throw new Error("Mot de passe incorrect. Veuillez réessayer.");
+          }
         });
       } else {
-        throw new Error('Email non trouvé. Veuillez réessayer.');
+        throw new Error("Email non trouvé. Veuillez réessayer.");
       }
     } catch (error) {
-      console.error('Erreur d\'authentification :', error);
+      setIsAuthenticated(false);
       throw error;
     }
   };
 
   return (
-    <AuthContext.Provider value={{ user, login }}>
+    <AuthContext.Provider value={{ login, isAuthenticated, email, setEmail }}>
       {children}
     </AuthContext.Provider>
   );

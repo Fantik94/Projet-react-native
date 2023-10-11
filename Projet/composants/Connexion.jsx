@@ -1,51 +1,59 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { useAuth } from './context/AuthContext';
+import React, { useState } from "react";
+import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from "react-native";
+import { useAuth } from "./context/AuthContext";
+import ChangePassword from "./ChangePassword";
 
 const Connexion = ({ navigation }) => {
-  const [email, setEmail] = useState('redac@yahoo.fr');
-  const [password, setPassword] = useState('azerty1234');
+  const [password, setPassword] = useState("azerty1234");
+  const [showChangePassword, setShowChangePassword] = useState(false);
 
-  const { login } = useAuth();
-
+  const { login, email, setEmail } = useAuth();
+  
   const handleConnexion = async () => {
     try {
       await login(email, password);
-      Alert.alert('Connexion réussie.');
-      
-      // Vous pouvez ajouter ici la navigation vers une autre page si nécessaire
-      // navigation.navigate('AutrePage');
+      Alert.alert("Connexion réussie.");
+      navigation.navigate('Accueil');
     } catch (error) {
-      Alert.alert('Identifiants incorrects. Veuillez réessayer.');
-      console.error('Erreur d\'authentification :', error.message);
+      console.error("Erreur d'authentification :", error);
+      Alert.alert("Identifiants incorrects. Veuillez réessayer.");
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Connexion</Text>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Adresse e-mail"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Mot de passe"
-          /*secureTextEntry={true}*/
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-        />
-      </View>
-      <View style={styles.buttonContainer}>
-        <Button
-          title="Se connecter"
-          onPress={handleConnexion}
-          style={styles.button}
-        />
-      </View>
+      {showChangePassword ? (
+        <ChangePassword />
+      ) : (
+        <>
+          <Text style={styles.title}>Connexion</Text>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Adresse e-mail"
+              value={email}
+              onChangeText={(text) => setEmail(text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Mot de passe"
+              secureTextEntry={true}
+              value={password}
+              onChangeText={(text) => setPassword(text)}
+            />
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button
+              title="Se connecter"
+              onPress={handleConnexion}
+              color="#8951FC"
+            />
+          </View>
+          <TouchableOpacity onPress={() => setShowChangePassword(true)}>
+            <Text style={{color: 'blue', marginTop: 15}}>Mot de passe oublié</Text>
+          </TouchableOpacity>
+        </>
+      )}
     </View>
   );
 };
@@ -53,38 +61,32 @@ const Connexion = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     marginTop: -200,
-    alignItems: 'center',
-    backgroundColor: '#E5E5E5',
+    alignItems: "center",
+    backgroundColor: "#E5E5E5",
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   inputContainer: {
-    width: '80%',
+    width: "80%",
     marginBottom: 20,
   },
   input: {
-    width: '100%',
+    width: "100%",
     height: 40,
-    backgroundColor: 'white', 
+    backgroundColor: "white",
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 5,
     paddingLeft: 10,
     marginBottom: 10,
   },
   buttonContainer: {
-    width: '80%',
-  },
-  button: {
-    width: '100%',
-    backgroundColor: '#8951FC',
-    padding: 15,
-    borderRadius: 5,
+    width: "80%",
   },
 });
 
