@@ -1,6 +1,6 @@
-import 'react-native-gesture-handler'; // Importez ceci en premier
+import 'react-native-gesture-handler'; 
 import React from 'react';
-import { TextEncoder, TextDecoder } from 'text-encoding'; // Ajoutez ces lignes
+import { TextEncoder, TextDecoder } from 'text-encoding'; 
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
 import { NavigationContainer } from '@react-navigation/native';

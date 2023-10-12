@@ -17,9 +17,8 @@ const Accueil = () => {
         const nouvellesOeuvres = [];
         querySnapshot.forEach((doc) => {
           const data = doc.data();
-          const dt_creation = data.dt_creation && typeof data.dt_creation.toDate === 'function' 
-              ? data.dt_creation.toDate().toLocaleString() 
-              : 'Date non disponible';
+          
+          const dt_creation = data.dt_creation ? data.dt_creation.toDate().toLocaleString() : 'Date non disponible';
           nouvellesOeuvres.push({ id: doc.id, ...data, dt_creation });
         });
 
