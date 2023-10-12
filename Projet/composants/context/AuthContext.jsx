@@ -6,7 +6,9 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [email, setEmail] = useState('');  // Initialisé à une chaîne vide
+  const [email, setEmail] = useState('');
+  const [role, setRole] = useState("");
+  const [accountId, setAccountId] = useState(""); 
   
   const login = async (email, password) => {
     try {
@@ -20,6 +22,9 @@ export function AuthProvider({ children }) {
           if (password === data.password) {
             setIsAuthenticated(true);
             setEmail(email);
+            setRole(data.role);
+            setAccountId(doc.id);
+          
           } else {
             throw new Error("Mot de passe incorrect. Veuillez réessayer.");
           }
@@ -33,11 +38,11 @@ export function AuthProvider({ children }) {
     }
   };
 
-  return (
-    <AuthContext.Provider value={{ login, isAuthenticated, email, setEmail }}>
+ return (
+    <AuthContext.Provider value={{ login, isAuthenticated, setIsAuthenticated, email, setEmail, role, setRole,accountId , setAccountId }}>
       {children}
     </AuthContext.Provider>
-  );
+);
 }
 
 export function useAuth() {

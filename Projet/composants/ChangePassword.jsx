@@ -21,7 +21,7 @@ export default function ChangePassword() {
         querySnapshot.forEach(async (doc) => {
           const data = doc.data();
           if (data.password === oldPassword) {
-            await updateDoc(doc.ref, {
+            await updateDoc(doc.ref, {  // Utilisation de doc.ref
               password: newPassword
             });
             Alert.alert('Mot de passe mis à jour avec succès');

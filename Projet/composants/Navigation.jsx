@@ -1,21 +1,36 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Connexion from './Connexion'; // Importez useNavigation pour accéder à la navigation
+import { useAuth } from './context/AuthContext'; 
 
 const Navigation = () => {
-  const navigation = useNavigation(); // Utilisez useNavigation pour accéder à la navigation
+  const navigation = useNavigation(); 
+  const { isAuthenticated, setEmail, setIsAuthenticated } = useAuth(); 
 
   const handleConnexionPress = () => {
-    navigation.navigate('Connexion'); // Redirigez l'utilisateur vers la page de connexion
+    navigation.navigate('Connexion'); 
   };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setEmail(''); 
+    navigation.navigate('Accueil'); 
+    
+    Alert.alert('Déconnexion', 'Vous avez été déconnecté avec succès !');
+};
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Musée</Text>
-      <TouchableOpacity onPress={handleConnexionPress}>
-        <Text style={styles.button}>Connexion</Text>
-      </TouchableOpacity>
+      {isAuthenticated ? (
+        <TouchableOpacity onPress={handleLogout}>
+          <Text style={styles.button}>Déconnexion</Text>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity onPress={handleConnexionPress}>
+          <Text style={styles.button}>Connexion</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
