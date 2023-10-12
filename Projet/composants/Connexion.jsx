@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from "react-native";
 import { useAuth } from "./context/AuthContext";
 import ChangePassword from "./ChangePassword";
+import { loginValidation } from "./verifs/validation";
 
 const Connexion = ({ navigation }) => {
   const [password, setPassword] = useState("azerty1234");
@@ -10,6 +11,11 @@ const Connexion = ({ navigation }) => {
   const { login, email, setEmail } = useAuth();
   
   const handleConnexion = async () => {
+    const { error } = loginValidation({ email, password }); // Validation avec Joi
+    if (error) {
+      return Alert.alert(error.message);
+    }
+
     try {
       await login(email, password);
       Alert.alert("Connexion réussie.");
