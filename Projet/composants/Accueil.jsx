@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { collection, getDocs } from 'firebase/firestore';
-import db from '../config'; 
-import { useNavigation } from '@react-navigation/native'; 
+import db from '../config';
+import { useNavigation } from '@react-navigation/native';
+import Menu from './Menu';
 
 const Accueil = () => {
   const [oeuvres, setOeuvres] = useState([]);
@@ -29,12 +30,11 @@ const Accueil = () => {
       }
     };
 
-    
     fetchOeuvres();
   }, []);
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>  
       <Text style={styles.titre}>Liste des œuvres :</Text>
       <FlatList
         data={oeuvres}
@@ -52,6 +52,7 @@ const Accueil = () => {
           </TouchableOpacity>
         )}
       />
+      <Menu />  
     </View>
   );
 };
