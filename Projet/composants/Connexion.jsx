@@ -56,7 +56,7 @@ const Connexion = ({ navigation }) => {
             />
           </View>
           <TouchableOpacity onPress={() => setShowChangePassword(true)}>
-            <Text style={{color: 'blue', marginTop: 15}}>Mot de passe oublié</Text>
+            <Text style={{color: 'blue', marginTop: 15}}>Changer de mot de passe </Text>
           </TouchableOpacity>
         </>
       )}
