@@ -1,5 +1,5 @@
-# Projet-react-native
-cd Projet/
+#Projet-react-native
+'cd Projet'
 npm i expo-cli
 npm i
 expo start
