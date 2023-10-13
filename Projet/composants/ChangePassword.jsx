@@ -1,43 +1,34 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import { useAuth } from './context/AuthContext';
-import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
-import { changePasswordValidation } from './verifs/validation';
+import { getFirestore, doc, getDoc, updateDoc, collection, query, where, getDocs } from "firebase/firestore"; 
 
 const db = getFirestore();
 
-export default function ChangePassword({ navigation }) {
+export default function ChangePassword() {
   const { email: userEmail } = useAuth();
   const [email, setEmail] = useState(userEmail || '');
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
   const handleChangePassword = async () => {
-    // Vérification si les champs sont vides
-    if (!email.trim() || !oldPassword.trim() || !newPassword.trim()) {
-      return Alert.alert('Tous les champs sont obligatoires.');
-    }
-
-    const { error } = changePasswordValidation({ email, oldPassword, newPassword });
-    if (error) {
-      return Alert.alert(error.message);
-    }
-
     try {
-      const docRef = doc(db, "gestionnaire", email);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        if (data.password === oldPassword) {
-          await updateDoc(docRef, {
-            password: newPassword
-          });
-          Alert.alert('Mot de passe mis à jour avec succès');
-          navigation.navigate('Accueil');
-        } else {
-          Alert.alert('L’ancien mot de passe est incorrect');
-        }
+      const gestionnairesRef = collection(db, "gestionnaire");
+      const q = query(gestionnairesRef, where("email", "==", email));
+      const querySnapshot = await getDocs(q);
+      
+      if (!querySnapshot.empty) {
+        querySnapshot.forEach(async (doc) => {
+          const data = doc.data();
+          if (data.password === oldPassword) {
+            await updateDoc(doc.ref, {
+              password: newPassword
+            });
+            Alert.alert('Mot de passe mis à jour avec succès');
+          } else {
+            Alert.alert('L’ancien mot de passe est incorrect');
+          }
+        });
       } else {
         Alert.alert('Email non trouvé');
       }
@@ -45,7 +36,7 @@ export default function ChangePassword({ navigation }) {
       Alert.alert(`Erreur: ${error.message}`);
     }
   };
-
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Changer le mot de passe</Text>
@@ -77,23 +68,19 @@ export default function ChangePassword({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#E5E5E5", 
+    padding: 20,
+    justifyContent: 'center',
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
     marginBottom: 20,
+    textAlign: 'center',
   },
   input: {
-    width: 300, // Largeur fixe en points
     height: 40,
-    backgroundColor: "white",
-    borderColor: "#ccc",
+    borderColor: 'gray',
     borderWidth: 1,
-    borderRadius: 5,
-    paddingLeft: 10,
-    marginBottom: 10,
+    marginBottom: 15,
+    padding: 10,
   },
 });
