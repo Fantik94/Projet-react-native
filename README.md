@@ -1,8 +1,8 @@
 #Projet-react-native
 ---------------
-'cd Projet'
-npm i expo-cli
-npm i
-expo start
+-'cd Projet'
+-npm i expo-cli
+-npm i
+-expo start
 
-npm run android 
+-npm run android 
